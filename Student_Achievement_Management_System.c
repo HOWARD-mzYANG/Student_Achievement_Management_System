@@ -139,10 +139,10 @@ int Menu(void)
 
 void Input_record(stu *student[], int n, int m) 
 {
-    printf("Input student's ID,name");
+    printf("Input student's ID,name: ");
     for (int i = 0; i < m; i++)
     {
-        scanf("%d%s" ,student[i]->num,student[i]->name);
+        scanf("%d %s" ,student[i]->num,student[i]->name);
         printf("Input your score");
         for (int j = 0; j < n; j++)
         {
