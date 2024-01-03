@@ -26,21 +26,23 @@ void Search_by_name(student, Number_of_students);
 void Statistic_analysis_for_every_course(stu *student[], int m, int n);
 void List_record(stu *student[], int m);
 void Write_to_a_file(stu *student[], int m, char *filename);
-void Read_from_file(stu *student[], char *filename);
+void Read_from_file(stu *student[], int *m, char *filename);
 
 
 
 int main()
 {
+    printf("2310461226  吴龙坤\n");
 
 
     stu *student[MAX_NUM];
 
     int Number_of_students,Number_of_course;
     printf("Input student number(m<30) and student course(n<6):");
-    if (scanf("%d" ,&Number_of_students) != 1 || scanf("%d" ,&Number_of_course) != 1)
+    if (scanf("%d" ,&Number_of_students) != 1 || scanf("%d" ,&Number_of_course) != 1 || Number_of_course > 6 || Number_of_students > 30)
     {
         printf("Invalid input");
+        return 1;
     }
 
     while (1)
@@ -82,10 +84,11 @@ int main()
                 List_record(student, Number_of_students);
                 break;
             case 12:
-                Write_to_a_file(student, Number_of_students);
+                Write_to_a_file(student, Number_of_students,"student_info.txt");
                 break;
             case 13:
-                Read_from_file(student,);
+                int read_number_of_students = 0;
+                Read_from_file(student, &read_number_of_students,"student_info.txt");
                 break;
         }
     }
@@ -136,10 +139,11 @@ int Menu(void)
 
 void Input_record(stu *student[], int n, int m) 
 {
-    printf("Inpuit student's ID,name and score");
+    printf("Input student's ID,name");
     for (int i = 0; i < m; i++)
     {
         scanf("%d%s" ,student[i]->num,student[i]->name);
+        printf("Input your score");
         for (int j = 0; j < n; j++)
         {
             scanf("%d", student[i]->score[j]);
@@ -275,7 +279,7 @@ void Search_by_name(stu *student[], int m)
   printf("Input your name");
   if (scanf("%s" ,&name) != 1)
   {
-    pirntf("Invalid input");
+    printf("Invalid input");
   }
 
   for (int i = 0; i < m; ++i)
@@ -342,51 +346,49 @@ void List_record(stu *student[], int m)
 }
 
 //写入文件
-void Write_to_file(stu *student[], int m)
+void Write_to_a_file(stu *student[], int m, char *filename)
 {
-  char *filename = "students.txt";
-  
-  FILE *fp = fopen(filename, "w");
-  if (fp == NULL)
-  {
-    printf("Error opening file!\n");
-    return;
-  }
-
-  for (int i = 0; i < m; ++i)
-  {
-    fprintf(fp, "%d %s", student[i]->num, student[i]->name);
-    for (int j = 0; j < MAX_COURSE; ++j)
+    FILE *fp;
+    if ((fp = fopen(filename, "w")) == NULL)
     {
-      fprintf(fp, " %.2f", student[i]->score[j]);
+        printf("Failure to open file %s\n", filename);
+        return;
     }
-    fprintf(fp, "\n");
-  }
 
-  fclose(fp);
-  printf("Write to file %s successfully!\n", filename);
+    fprintf(fp, "%d\t%d\n", m, MAX_COURSE);
+    for (int i = 0; i < m; i++)
+    {
+        fprintf(fp, "%d\t%s\t", student[i]->num, student[i]->name);
+        for (int j = 0; j < MAX_COURSE; j++)
+        {
+            fprintf(fp, "%.2f\t", student[i]->score[j]);
+        }
+        fprintf(fp, "\n");
+    }
+    fclose(fp);
 }
 
 //从文件读取
-void Read_from_file(stu *student[], char *filename) 
+void Read_from_file(stu *student[], int *m, char *filename)
 {
-  FILE *fp = fopen(filename, "r");
-  if (fp == NULL)
-  {
-    printf("Error opening file!\n");
-    return;
-  }
-
-  int i = 0;
-  while (fscanf(fp, "%d %s", &student[i]->num, student[i]->name) != EOF) 
-  {
-    for (int j = 0; j < MAX_COURSE; ++j)
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL)
     {
-      fscanf(fp, "%f", &student[i]->score[j]);
+        printf("Error opening file %s\n", filename);
+        return;
     }
-    ++i;
-  }
 
-  fclose(fp);
-  printf("Read from file %s successfully!\n", filename);
+    fscanf(fp, "%d", m);
+    for (int i = 0; i < *m; i++)
+    {
+        student[i] = (stu *)malloc(sizeof(stu));
+        fscanf(fp, "%d%s", &student[i]->num, student[i]->name);
+        for (int j = 0; j < MAX_COURSE; j++)
+        {
+            fscanf(fp, "%f", &student[i]->score[j]);
+        }
+    }
+
+    fclose(fp);
+    printf("Read from file %s successfully!\n", filename);
 }
