@@ -21,8 +21,8 @@ void Sort_in_descending_order_by_total_score_of_every_student(stu *student[], in
 void Sort_in_ascending_order_by_total_score_of_every_student(stu *student[], int m);
 void Sort_in_ascending_order_by_number(stu *student[], int m);
 void Sort_in_dictionary_order_by_name(stu *student[], int m);
-void Search_by_number();
-void Search_by_name();
+void Search_by_number(student, Number_of_students);
+void Search_by_name(student, Number_of_students);
 void Statistic_analysis_for_every_course(stu *student[], int m, int n);
 void List_record(stu *student[], int m);
 void Write_to_a_file(stu *student[], int m, char *filename);
