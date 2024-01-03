@@ -32,7 +32,6 @@ void Read_from_file(stu *student[], char *filename);
 
 int main()
 {
-    printf("2310461226  吴龙坤\n");
 
 
     stu *student[MAX_NUM];
